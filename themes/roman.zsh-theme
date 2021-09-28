@@ -1,4 +1,4 @@
-# current time with milliseconds
+ # current time with milliseconds
 current_time() {
    echo "%*"
 }
@@ -39,6 +39,8 @@ custom_git_prompt(){
       num_modified=$(git status -s | egrep "^ M" | wc -l | xargs)
       num_untracked=$(git status -s | egrep "^\?\?" | wc -l | xargs)
       num_in_progress=$(git status -s | egrep "^AM" | wc -l | xargs)
+      num_staged=$(git status -s | egrep "^M " | wc -l | xargs)
+      num_renamed=$(git status -s | egrep "^R" | wc -l | xargs)
 
       prompt_so_far="$ZSH_THEME_GIT_PROMPT_PREFIX"
       if [[ $num_added > 0 ]];
@@ -49,6 +51,15 @@ custom_git_prompt(){
       if [[ $num_in_progress > 0 ]];
       then
          prompt_so_far="$prompt_so_far %F{215}\ufc23 \ue0b6%f%K{215}%F{232}$num_in_progress%f%k%F{215}\ue0b4%f"
+      fi
+      if [[ $num_staged > 0 ]];
+      then
+         prompt_so_far="$prompt_so_far %F{120}\uf135 \ue0b6%f%K{120}%F{232}$num_staged%f%k%F{120}\ue0b4%f"
+         # or f102?
+      fi
+      if [[ $num_renamed > 0 ]];
+      then
+         prompt_so_far="$prompt_so_far %F{122}\uf040 \ue0b6%f%K{122}%F{232}$num_renamed%f%k%F{122}\ue0b4%f"
       fi
       if [[ $num_modified > 0 ]];
       then
