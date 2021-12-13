@@ -41,6 +41,7 @@ custom_git_prompt(){
       num_in_progress=$(git status -s | egrep "^AM" | wc -l | xargs)
       num_staged=$(git status -s | egrep "^M " | wc -l | xargs)
       num_renamed=$(git status -s | egrep "^R" | wc -l | xargs)
+      num_deleted=$(git status -s | egrep "^D " | wc -l | xargs)
 
       prompt_so_far="$ZSH_THEME_GIT_PROMPT_PREFIX"
       if [[ $num_added > 0 ]];
@@ -60,6 +61,11 @@ custom_git_prompt(){
       if [[ $num_renamed > 0 ]];
       then
          prompt_so_far="$prompt_so_far %F{122}\uf040 \ue0b6%f%K{122}%F{232}$num_renamed%f%k%F{122}\ue0b4%f"
+      fi
+      if [[ $num_deleted > 0 ]];
+      then
+         ZSH_THEME_GIT_PROMPT_MODIFIED="%F{203}\uf48e \ue0b6%f%K{203}$num_deleted%k%F{203}\ue0b4%f"
+         prompt_so_far="$prompt_so_far $ZSH_THEME_GIT_PROMPT_MODIFIED"
       fi
       if [[ $num_modified > 0 ]];
       then
