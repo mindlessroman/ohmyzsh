@@ -31,12 +31,14 @@ custom_git_prompt(){
    then
       echo "( \uf10c )"
    else
+      rebasing=$(git status | egrep "rebase in progress")
       branch=$(git symbolic-ref --short HEAD 2> /dev/null)
       ZSH_THEME_GIT_PROMPT_PREFIX="\n %F{032}\ue0d4%f%K{032}$branch%k%F{032}\ue0b0%f"
 
       # grab some numbers
       num_added=$(git status -s | egrep "^A" | wc -l | xargs)
       num_modified=$(git status -s | egrep "^ M" | wc -l | xargs)
+      num_modified_after_adding=$(git status -s | egrep "^MM" | wc -l | xargs)
       num_untracked=$(git status -s | egrep "^\?\?" | wc -l | xargs)
       num_in_progress=$(git status -s | egrep "^AM" | wc -l | xargs)
       num_staged=$(git status -s | egrep "^M " | wc -l | xargs)
@@ -67,9 +69,13 @@ custom_git_prompt(){
          ZSH_THEME_GIT_PROMPT_MODIFIED="%F{203}\uf48e \ue0b6%f%K{203}$num_deleted%k%F{203}\ue0b4%f"
          prompt_so_far="$prompt_so_far $ZSH_THEME_GIT_PROMPT_MODIFIED"
       fi
+      if [[ $num_modified_after_adding > 0 ]];
+      then
+         prompt_so_far="$prompt_so_far %F{161}\uf040 \ue0b6%f%K{122}%F{232}$num_modified_after_adding%f%k%F{161}\ue0b4%f"
+      fi
       if [[ $num_modified > 0 ]];
       then
-         ZSH_THEME_GIT_PROMPT_MODIFIED="%F{196}\uf00d \ue0b6%f%K{196}$num_modified%k%F{196}\ue0b4%f"
+         ZSH_THEME_GIT_PROMPT_MODIFIED="%F{201}\uf2d3 \ue0b6%f%K{201}$num_modified%k%F{201}\ue0b4%f"
          prompt_so_far="$prompt_so_far $ZSH_THEME_GIT_PROMPT_MODIFIED"
       fi
       if [[ $num_untracked > 0 ]];
