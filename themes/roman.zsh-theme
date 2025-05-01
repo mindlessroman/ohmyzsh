@@ -40,21 +40,21 @@ toggle_panel(){
 # needs gnu grep - 'brew install grep'
 custom_git_prompt(){
   is_git_dir=$(git status 2>&1)
-  trunk=""
-  trunk_is_main=$(git branch | ggrep -Pio "main" | wc -l | xargs)
-  trunk_is_master=$(git branch | ggrep -Pio "master" | wc -l | xargs)
-  if [[ $trunk_is_main -gt 0 ]]; then
-    trunk="main"
-  elif [[ $trunk_is_master -gt 0 ]]; then
-    trunk="master"
-  fi
-
-
-  branch=''
-  ZSH_THEME_GIT_PROMPT_PREFIX=''
 
   if [[ "$is_git_dir" != "fatal: not a git repository (or any of the parent directories): .git" ]]
   then
+    trunk=""
+    trunk_is_main=$(git branch | ggrep -Pio "main" | wc -l | xargs)
+    trunk_is_master=$(git branch | ggrep -Pio "master" | wc -l | xargs)
+    if [[ $trunk_is_main -gt 0 ]]; then
+      trunk="main"
+    elif [[ $trunk_is_master -gt 0 ]]; then
+      trunk="master"
+    fi
+
+    branch=''
+    ZSH_THEME_GIT_PROMPT_PREFIX=''
+
     detached_head=$(git status | egrep "^HEAD detached at" | wc -l | xargs)
     rebasing=$(git status | egrep "^interactive rebase in progress" | wc -l | xargs)
     merge_conflict_artifacts_unstaged_open=$(git diff | egrep "<<<<" | wc -l | xargs)
@@ -100,12 +100,12 @@ custom_git_prompt(){
     # Show off the counts of different statuses
     if [[ ($merge_conflict_artifacts_unstaged_open > 0 || $merge_conflict_artifacts_unstaged_closed > 0) && $rebasing > 0 ]];
     then
-      # f9e6 is an alert symbol - orange if unstaged
+      # f421 is an alert symbol - orange if unstaged
       prompt_so_far="$prompt_so_far %K{166}\uf421 %k"
     fi
     if [[ ($merge_conflict_artifacts_staged_open > 0 || $merge_conflict_artifacts_staged_closed > 0) && $rebasing > 0 ]];
     then
-      # f9e6 is an alert symbol - red if staged
+      # f421 is an alert symbol - red if staged
       prompt_so_far="$prompt_so_far %K{196}\uf421 %k"
     fi
     if [[ $num_added > 0 ]];
@@ -154,8 +154,8 @@ custom_git_prompt(){
     fi
     if [[ $num_untracked > 0 ]];
     then
-      # f79f is a ghost
-      ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{141}\uf79f \ue0b6%f%K{141}$num_untracked%k%F{141}\ue0b4%f"
+      # eefe is a ghost
+      ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{141}\ueefe \ue0b6%f%K{141}$num_untracked%k%F{141}\ue0b4%f"
       prompt_so_far="$prompt_so_far $ZSH_THEME_GIT_PROMPT_UNTRACKED"
     fi
     if [[ $commits_to_push > 0 ]];
